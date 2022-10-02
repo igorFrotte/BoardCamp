@@ -1,9 +1,5 @@
 import connection from '../db/database.js';
-import joi from 'joi';
-
-const categorySchema = joi.object({
-    name: joi.string().required()
-}); 
+import { categorySchema } from '../schemas/category.schema.js';
 
 const list = async (req, res) => {
     try {

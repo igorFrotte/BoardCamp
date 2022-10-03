@@ -4,12 +4,15 @@ import { customerSchema } from '../schemas/customer.schema.js';
 const list = async (req, res) => {
   const { cpf } = req.query;
   let cond = "";
+  const arrayInsert = [];
   try {
       if(cpf){
-          cond = `WHERE LOWER(cpf) LIKE '${cpf.toLowerCase()}%'`;
+          cond = `WHERE LOWER(cpf) LIKE $1`;
+          arrayInsert.push(cpf.toLowerCase() + "%");
       }
       const games = await connection.query(
-              `SELECT * FROM customers ${cond};`
+              `SELECT * FROM customers ${cond};`,
+              arrayInsert
           ); 
       
       const obj = games.rows.map((e) => {
@@ -26,7 +29,8 @@ const listById = async (req, res) => {
   const { id } = req.params;
   try {
     const games = await connection.query(
-            `SELECT * FROM customers WHERE id=${id} ;`
+            `SELECT * FROM customers WHERE id=$1 ;`,
+            [id]
         ); 
     
     if (!games.rows[0]) {  

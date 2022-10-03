@@ -5,6 +5,6 @@ const customerSchema = joi.object({
     cpf: joi.string().pattern(/[0-9]/).min(11).max(11).required(),
     name: joi.string().required(),
     birthday: joi.date().required()
-})
+});
 
 export { customerSchema };

@@ -4,12 +4,15 @@ import { gameSchema } from '../schemas/game.schema.js';
 const list = async (req, res) => {
     const { name } = req.query;
     let cond = "";
+    const arrayInsert = [];
     try {
         if(name){
-            cond = `WHERE LOWER(games.name) LIKE '${name.toLowerCase()}%'`;
+            cond = `WHERE LOWER(games.name) LIKE $1`;
+            arrayInsert.push(name.toLowerCase() + "%");
         }
         const games = await connection.query(
-                `SELECT games.*, categories.name as "categoryName" FROM games JOIN categories ON games."categoryId"=categories.id ${cond};`
+                `SELECT games.*, categories.name as "categoryName" FROM games JOIN categories ON games."categoryId"=categories.id ${cond};`,
+                arrayInsert
             ); 
     
         res.status(200).send(games.rows);
